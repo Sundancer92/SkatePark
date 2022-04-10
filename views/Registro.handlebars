@@ -1,3 +1,4 @@
+
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -6,7 +7,7 @@
 		<title>Document</title>
 		<link rel="stylesheet" href="/bootstrap/bootstrap.css"/>
     <script src="/BootstrapJs/bootstrap.js"></script>
-		<link rel="stylesheet" href="/public/styles/estilos.css" />
+		<link rel="stylesheet" href="/styles/estilos.css" />
 	</head>
 	<body>
 		<h1>Skate Park</h1>
@@ -15,35 +16,36 @@
 			<h2>Registro</h2>
 			<hr />
 
-			<form>
+			<form action="/registrar" method="POST" enctype="multipart/form-data">
 				<div class="form-group row w-50 m-auto">
 					<div class="form-group col-12 col-sm-6">
 						<label>Email</label>
-						<input class="form-control m-auto" />
+						<input name="email" class="form-control m-auto " />
 					</div>
 					<div class="form-group col-12 col-sm-6">
 						<label>Nombre</label>
-						<input class="form-control m-auto" />
+						<input name="nombre" class="form-control m-auto " />
 					</div>
 					<div class="form-group col-12 col-sm-6">
 						<label>Password</label>
-						<input class="form-control m-auto" />
+						<input name="password" class="form-control m-auto " />
 					</div>
 					<div class="form-group col-12 col-sm-6">
 						<label>Repita la password</label>
-						<input class="form-control m-auto" />
+						<input name="confirm" class="form-control m-auto " />
+						<span id='message'></span>
 					</div>
 					<div class="form-group col-12 col-sm-6">
 						<label>Años de experiencia</label>
-						<input class="form-control m-auto" />
+						<input name="experiencia" type="number" class="form-control m-auto " />
 					</div>
 					<div class="form-group col-12 col-sm-6">
 						<label>Especialidad</label>
-						<input class="form-control m-auto" />
+						<input name="especialidad" class="form-control m-auto " />
 					</div>
 					<div class="form-group col-12 col-sm-12">
 						<label>Foto de perfil</label>
-						<input type="file" />
+						<input name="target_file" type="file" />
 					</div>
 				</div>
 				<button class="btn btn-info mb-3">Registrarme</button>
@@ -51,4 +53,43 @@
 			</form>
 		</div>
 	</body>
+
+	<script>
+		const form = document.querySelector('form');
+
+		form.addEventListener('submit', (e) => {
+			
+
+			const email = document.querySelector('input[name="email"]').value;
+			const nombre = document.querySelector('input[name="nombre"]').value;
+			const password = document.querySelector('input[name="password"]').value;
+			const confirm = document.querySelector('input[name="confirm"]').value;
+			const experiencia = document.querySelector('input[name="experiencia"]').value;
+			const especialidad = document.querySelector('input[name="especialidad"]').value;
+
+			const url = "/registrar";
+			const data = {
+				email,
+				nombre,
+				password,
+				confirm,
+				experiencia,
+				especialidad,
+				};
+
+			fetch(url, {
+				mehotd: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(res => {
+				if(res.status === 200){
+					alert('Registro exitoso');
+				}
+			})
+	})
+
+	</script>
+
 </html>

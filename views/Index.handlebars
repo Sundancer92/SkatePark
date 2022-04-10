@@ -10,7 +10,7 @@
 			integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 			crossorigin="anonymous"
 		/>
-		<link rel="stylesheet" href="/public/styles/estilos.css" />
+		<link rel="stylesheet" href="/styles/estilos.css" />
 	</head>
 	<body>
 		<h1 >Skate Park</h1>
@@ -34,7 +34,7 @@
 					<tbody>
 						<tr>
 							<th scope="row">1</th>
-							<td><div></div></td>
+							<td><div><img src="/img/tony.jpg" alt="FotoTonyHawk"></div></td>
 							<td>Tony Hawk</td>
 							<td>12</td>
 							<td>Kickflip</td>
@@ -42,7 +42,7 @@
 						</tr>
 						<tr>
 							<th scope="row">2</th>
-							<td><div></div></td>
+							<td><div><img src="/img/evelien.jpg" alt="FotoEvelien"></div></td>
 							<td>Evelien Bouilliart</td>
 							<td>10</td>
 							<td>Heelflip</td>
@@ -50,7 +50,7 @@
 						</tr>
 						<tr>
 							<th scope="row">3</th>
-							<td><div></div></td>
+							<td><div><img src="/img/danny.jpg" alt="FotoDanny"></div></td>
 							<td>Danny Way</td>
 							<td>8</td>
 							<td>Ollie</td>
@@ -66,5 +66,36 @@
 			</div>
 		</div>
 	</body>
+
+	<script>
+		const getData = async () => {
+			console.log('------ Index GET DATA ------');
+			const response = await fetch('/skaters');
+			let data = await response.json();
+			printSkaters(data)
+		}
+
+		const printSkaters = (data) => {
+			let tableSkaters = document.getElementsByTagName('tbody')[0];
+			tableSkaters.innerHTML = '';
+
+			for (let i = 0; i<data.skaters.length; i++){
+				console.log(data.skaters[i]);
+				tableSkaters.innerHTML += `
+						<tr>
+							<th scope="row">${data.skaters[i].id}</th>
+							<td><div><img src="/img/${data.skaters[i].foto}" alt="FotoEvelien"></div></td>
+							<td>${data.skaters[i].nombre}</td>
+							<td>${data.skaters[i].anos_experiencia}</td>
+							<td>${data.skaters[i].especialidad}</td>
+							<td class="text-success font-weight-bold">${data.skaters[i].estado}</td>
+						</tr>
+				`
+			}
+
+		}
+		getData()
+
+	</script>
 
 </html>

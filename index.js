@@ -18,10 +18,32 @@ app.engine(
 		partialsDir: __dirname + "/views/componentes/",
 	}),
 );
+// ---------- FILE UPLOAD ----------
+const { v4: uuidv4 } = require('uuid');
+const fs = require("fs");
+const expressFileUpload = require("express-fileupload");
+app.use(
+	expressFileUpload({
+		limits: { fileSize: 5000000 },
+		abortOnLimit: true,
+		responseOnLimit:
+			"<div><h1>El peso del archivo que intentas subir supera el limite permitido => 5mb.</h1><button><a href='/'>Volver</a></button></div><style> body{background-color: black;color: white;text-align: center;},</style>",
+	}),
+);
+
+
 // ---------- DECLARACIONES ----------
 require("dotenv").config();
 const port = process.env.PORT || 3000;
-const {} = require('./DB/querys.js')
+
+
+const validateToken = (token) => {
+	let key = token;
+	const validate = jwt.verify(key, process.env.PRIVATE_KEY);
+	return validate;
+};
+
+const { getSkaters, postSkater } = require('./DB/querys.js')
 // -------- FIN DECLARACIONES --------
 
 // ---------- SERVER ----------
@@ -32,8 +54,7 @@ app.listen(port, () => {
 
 // ------------ MIDDLEWARES ------------
 app.use(cookieParser());
-app.use("/public", express.static(__dirname + "/public"));
-app.use(express.static(__dirname + "public"));
+app.use(express.static(__dirname + "/public"));
 
 // * Bootstrap
 app.use(
@@ -74,3 +95,32 @@ app.get("/Dashboard", (req, res) => {
 });
 
 // ---------- FIN RUTAS ----------
+
+// ---------- API REST ----------
+
+app.get('/skaters', async (req, res) => {
+        const skaters = await getSkaters();
+        res.end(JSON.stringify(skaters))
+})
+
+app.post("/registrar", async (req, res) => {
+    const { email, nombre, password, experiencia, especialidad} = req.body;
+    const {target_file} = req.files;
+    const fileName = uuidv4()+target_file.name;
+
+    try {
+        const skater = await postSkater({
+            email, nombre, password, experiencia, especialidad, fileName
+        })
+        target_file.mv(
+            `${__dirname}/public/img/${fileName}`,
+        )
+    } catch (error) {
+        console.log(error);
+    }
+    
+
+    res.redirect("/")
+})
+
+// -------- FIN API REST --------
