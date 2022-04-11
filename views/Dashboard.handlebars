@@ -12,12 +12,13 @@
 		<h1>Skate Park</h1>
 
 		<div class="py-5">
-			<h2>DASHBOARD</h2>
 			<hr />
-
-            {{> Admin}}
+			{{#if skater}}
             {{> EditData}}
-
+			{{/if}}
+			{{#if admin}}
+            {{> Admin}}
+			{{/if}}
 
 		</div>
 	</body>
