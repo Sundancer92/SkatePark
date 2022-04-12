@@ -68,4 +68,20 @@ const checkLogIn = async (email, password) => {
 	}
 }
 
-module.exports = { getSkaters, postSkater, checkLogIn };
+const putSkaterStatus = async (id,status) => {
+	const updateData = "UPDATE skaters SET estado = $1 WHERE id = $2";
+
+	try {
+		await pool.query('BEGIN');
+		const resultUpdate = await pool.query(updateData, [status,id]);
+		await pool.query('COMMIT');
+		return { skater: resultUpdate.rows[0] };
+	} catch (error) {
+		await pool.query('ROLLBACK');
+		console.log("--------Error en updateSkaterStatus--------");
+		console.log(error);
+		return { error: error };
+	}
+}
+
+module.exports = { getSkaters, postSkater, checkLogIn, putSkaterStatus };

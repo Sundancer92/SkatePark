@@ -40,7 +40,7 @@ const validateToken = (token) => {
 	return validate;
 };
 
-const { getSkaters, postSkater, checkLogIn } = require("./DB/querys.js");
+const { getSkaters, postSkater, checkLogIn, putSkaterStatus } = require("./DB/querys.js");
 const { stringify } = require("querystring");
 // -------- FIN DECLARACIONES --------
 
@@ -64,9 +64,18 @@ app.use(
 	express.static(__dirname + "/node_modules/bootstrap/dist/js/"),
 );
 // * FIN Bootstrap
+
+app.use("/Dashboard", async (req, res, next) => {
+	if (req.cookies.token) {
+		next();
+	} else {
+		res.redirect("/");
+	}
+});
+
 // ------------ FIN MIDDLEWARES ------------
 
-// ------------ RUTAS ------------
+// ------------ RUTAS VISTAS------------
 
 app.get("/", (req, res) => {
 	res.render("Index", {
@@ -109,7 +118,7 @@ app.get("/Dashboard", (req, res) => {
 	}
 });
 
-// ---------- FIN RUTAS ----------
+// ---------- FIN RUTAS VISTAS ----------
 
 // ---------- API REST ----------
 
@@ -148,7 +157,6 @@ app.get("/validate", async (req, res) => {
 		const token = jwt.sign({ user }, process.env.PRIVATE_KEY);
 		res.cookie("token", token, {
 			httpOnly: true,
-			maxAge: 1200,
 		});
 		res.redirect("/Dashboard");
 	} else {
@@ -156,5 +164,11 @@ app.get("/validate", async (req, res) => {
 		res.redirect("/Login");
 	}
 });
+
+app.put("/updateStatus", async (req, res) => {
+	const { id, status } = req.body;
+	const skater = await putSkaterStatus(id, status);
+	res.end(JSON.stringify(skater));
+})
 
 // -------- FIN API REST --------

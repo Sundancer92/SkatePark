@@ -4,7 +4,7 @@
 
 		<div class="py-4">
 			<h2>Administración</h2>
-			<hr class="w-50" />
+			<hr />
 
 			<table class="table w-50 m-auto">
 				<thead>
@@ -18,32 +18,63 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td><div></div></td>
-						<td>Tony Hawk</td>
-						<td>12</td>
-						<td>Kickflip</td>
-						<td><input type="checkbox" checked /></td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td><div></div></td>
-						<td>Evelien Bouilliart</td>
-						<td>10</td>
-						<td>Heelflip</td>
-						<td><input type="checkbox" checked /></td>
-					</tr>
-					<tr>
-						<th scope="row">3</th>
-						<td><div></div></td>
-						<td>Danny Way</td>
-						<td>8</td>
-						<td>Ollie</td>
-						<td><input type="checkbox" /></td>
-					</tr>
+
 				</tbody>
 			</table>
 		</div>
 	</body>
+	<script>
+			const getData = async () => {
+			console.log('------ Index GET DATA ADMIN ------');
+			const response = await fetch('/skaters');
+			let data = await response.json();
+			printSkaters(data);
+		}
+
+		const printSkaters = (data) => {
+			let tableSkaters = document.getElementsByTagName('tbody')[0];
+			tableSkaters.innerHTML = '';
+
+		for (let i = 0; i<data.skaters.length; i++){
+			
+			let status = 'checked'
+
+			if(data.skaters[i].estado == false){
+				status = 'uncheked'
+			}
+
+				tableSkaters.innerHTML += `
+					<tr>
+						<th scope="row">${data.skaters[i].id}</th>
+						<td><div><img src="/img/${data.skaters[i].foto}" alt="Foto${data.skaters[i].nombre}"></div></td>
+						<td>${data.skaters[i].nombre}</td>
+						<td>${data.skaters[i].anos_experiencia}</td>
+						<td>${data.skaters[i].especialidad}</td>
+						<td><input id="${data.skaters[i].id}" type="checkbox" onchange="updateUserStatus()" ${status}/></td>
+					</tr>
+				`
+			}
+}
+
+		const updateUserStatus = async () => {
+			console.log('------ Index UPDATE USER STATUS ------');
+			let id = event.target.id;
+			let status = event.target.checked;
+			let data = {
+				id: id,
+				status: status
+			}
+			
+			const response = await fetch('/updateStatus', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+		}
+
+
+	getData()
+	</script>
 </html>
