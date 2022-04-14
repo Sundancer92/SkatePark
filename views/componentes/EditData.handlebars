@@ -5,52 +5,104 @@
       <h2>Datos del perfil</h2>
       <hr />
 
-      <form>
+      <form action="/updateUser">
+        
         <div class="form-group row w-50 m-auto">
           <div class="form-group col-12 col-sm-6">
             <label>Email</label>
             <input
               class="form-control m-auto"
+              name="email"
               disabled
-              value="tonyhawk@skate.com"
+              value="{{email}}"
             />
           </div>
           <div class="form-group col-12 col-sm-6">
             <label>Nombre</label>
-            <input class="form-control m-auto" value="Tony Hawk" />
+            <input class="form-control m-auto" name="nombre" value="{{nombre}}" />
           </div>
+
           <div class="form-group col-12 col-sm-6">
             <label>Password</label>
             <input
-              type="password"
-              class="form-control m-auto"
-              value="12345678"
-            />
+              type="text" name="password"
+              oninput="form.confirmPassword.pattern = escapeRegExp(this.value)"
+              class="form-control m-auto "
+            required/>
           </div>
           <div class="form-group col-12 col-sm-6">
             <label>Repita la password</label>
             <input
-              type="password"
+              type="text" name="confirmPassword" 
               class="form-control m-auto"
-              value="12345678"
-            />
+            required/>
           </div>
+
           <div class="form-group col-12 col-sm-6">
             <label>Años de experiencia</label>
-            <input class="form-control m-auto" value="12" />
+            <input class="form-control m-auto" name="anos_experiencia" value="{{anos_experiencia}}" />
           </div>
           <div class="form-group col-12 col-sm-6">
             <label>Especialidad</label>
-            <input class="form-control m-auto" value="Kickflip" />
+            <input class="form-control m-auto" name="especialidad" value="{{especialidad}}" />
           </div>
         </div>
         <div class="mb-1">
-          <button class="btn btn-primary">Actualizar</button>
-        </div>
-        <div>
-          <button class="btn btn-danger">Eliminar cuenta</button>
+          <button class="btn btn-primary mt-3">Actualizar</button>
         </div>
       </form>
+      <div>
+        <button id="deleteBtn" class="btn btn-danger" >Eliminar cuenta</button>
+      </div>
     </div>
   </body>
+
+  <script>
+    const form = document.querySelector("form");
+    const deleteBtn = document.querySelector("#deleteBtn");
+
+    deleteBtn.addEventListener("click", function(e){
+      const url = '/deleteUser/?id={{id}}';
+      if(confirm("¿Estás seguro de que quieres eliminar tu cuenta?")){
+        fetch(url, {
+          method: "DELETE",
+        })
+        .then(res =>{
+          if(res.status === 204){
+            window.location.href = "/";
+          }
+        })
+      }
+    });
+
+    form.addEventListener("submit", (e) => {
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+      data.id = {{id}};
+      data.email = "{{email}}";
+      
+      fetch('/updateUser', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        if (res.status === 200) {
+          window.location.href = "/";
+        }
+      });
+
+    });
+
+    function escapeRegExp(str) {
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
+
+  </script>
+
 </html>

@@ -40,7 +40,14 @@ const validateToken = (token) => {
 	return validate;
 };
 
-const { getSkaters, postSkater, checkLogIn, putSkaterStatus } = require("./DB/querys.js");
+const {
+	getSkaters,
+	postSkater,
+	checkLogIn,
+	putSkaterStatus,
+	updateUserData,
+	deleteUser,
+} = require("./DB/querys.js");
 const { stringify } = require("querystring");
 // -------- FIN DECLARACIONES --------
 
@@ -107,10 +114,14 @@ app.get("/Dashboard", (req, res) => {
 				admin: true,
 			});
 		} else if (user === "skater") {
-			console.log("skater");
 			res.render("Dashboard", {
 				layout: "Dashboard",
 				skater: true,
+				id: auth.user.user.id,
+				email: auth.user.user.email,
+				nombre: auth.user.user.nombre,
+				anos_experiencia: auth.user.user.anos_experiencia,
+				especialidad: auth.user.user.especialidad,
 			});
 		}
 	} else {
@@ -169,6 +180,27 @@ app.put("/updateStatus", async (req, res) => {
 	const { id, status } = req.body;
 	const skater = await putSkaterStatus(id, status);
 	res.end(JSON.stringify(skater));
-})
+});
+
+app.put("/updateUser", (req, res) => {
+	const { id, nombre, password, anos_experiencia, especialidad } = req.body;
+
+	const updatedUser = updateUserData(
+		id,
+		nombre,
+		password,
+		anos_experiencia,
+		especialidad,
+	);
+	res.end(JSON.stringify(updatedUser));
+});
+
+app.delete("/deleteUser", async (req, res) => {
+	console.log("------------- DELETE USER REST -------------");
+	const id = req.query.id;
+	await deleteUser(id);
+	res.status(204);
+	res.send("User deleted");
+});
 
 // -------- FIN API REST --------

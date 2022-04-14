@@ -57,6 +57,8 @@
 			tableSkaters.innerHTML = '';
 
 			for (let i = 0; i<data.skaters.length; i++){
+				const estado = estadoUser(data.skaters[i].estado);
+
 				tableSkaters.innerHTML += `
 						<tr>
 							<th scope="row">${data.skaters[i].id}</th>
@@ -64,12 +66,22 @@
 							<td>${data.skaters[i].nombre}</td>
 							<td>${data.skaters[i].anos_experiencia}</td>
 							<td>${data.skaters[i].especialidad}</td>
-							<td class="text-success font-weight-bold">${data.skaters[i].estado}</td>
+							${estado}
 						</tr>
 				`
-			}
-
+			}		
 		}
+
+		
+
+		const estadoUser = (estado) => {
+			if (estado == true){
+				return '<td class="text-success font-weight-bold">Aprobado</td>'
+			} else {
+				return '<td class="text-warning font-weight-bold">En revisión</td>'
+			}
+		}
+
 		getData()
 
 	</script>
