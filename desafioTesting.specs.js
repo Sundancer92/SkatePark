@@ -7,7 +7,7 @@ describe("SMOKE TEST - Skatepark", () => {
 
 describe("Test Completar Login", () => {
 	it("Test a Un Input", () => {
-		cy.visit("https://skatepark-g13-jp.herokuapp.com/Login");
+		cy.visit("https://skatepark-g13-jp.herokuapp.com");
         
         cy.get("input:first").type("me@me.com");
         cy.get("input:last").type("123");
