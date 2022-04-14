@@ -1,7 +1,12 @@
 require("dotenv").config();
 const { Pool } = require("pg");
 // ! Modificar antes de subir a HEROKU
-const pool = new Pool();
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false,
+	},
+});
 
 const getSkaters = async () => {
 	const getData = "SELECT * FROM skaters WHERE tipo = 'skater'";

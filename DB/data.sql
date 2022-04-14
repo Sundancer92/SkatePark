@@ -12,10 +12,14 @@ CREATE TABLE skaters (
 
 INSERT INTO 
 skaters (email, nombre, password, anos_experiencia, especialidad, foto, estado, tipo)
-VALUES ('evelien@skatepark.com', 'Evelien', 'qwe', 'q', 'Evelien.jpg', 'true', 'skater');
+VALUES ('evelien@skatepark.com', 'Evelien', '123', '3', 'Salto triple Mortal', 'Evelien.jpg', 'true', 'skater');
 
 INSERT INTO
 skaters (email, nombre, password, anos_experiencia, especialidad, foto, estado, tipo)
-VALUES ('tonyhawk@skatepark.com', 'Tony Hawk', '123', '15', 'Tony Hawk.jpg', 'true', 'skater');
+VALUES ('tonyhawk@skatepark.com', 'Tony Hawk', '123', '15', 'Supreme Hawk', 'TonyHawk.jpg', 'true', 'skater');
+
+INSERT INTO
+skaters (email, nombre, password, anos_experiencia, especialidad, foto, estado, tipo)
+VALUES ('admin@admin.com', 'El Profesor', '1@3', '777', 'Santo Derroche', 'Profesor.jpg', 'true', 'admin');
 
 
