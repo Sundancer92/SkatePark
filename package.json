@@ -4,7 +4,8 @@
   "description": "ExpressJS HandleBars File-Upload Cypress JWT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "cypress:open": "cypress open"
   },
   "author": "Juan Pedro Tovar",
   "license": "ISC",

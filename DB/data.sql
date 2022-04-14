@@ -9,3 +9,13 @@ CREATE TABLE skaters (
     estado BOOLEAN NOT NULL,
     tipo VARCHAR (50) NOT NULL,
 );
+
+INSERT INTO 
+skaters (email, nombre, password, anos_experiencia, especialidad, foto, estado, tipo)
+VALUES ('evelien@skatepark.com', 'Evelien', 'qwe', 'q', 'Evelien.jpg', 'true', 'skater');
+
+INSERT INTO
+skaters (email, nombre, password, anos_experiencia, especialidad, foto, estado, tipo)
+VALUES ('tonyhawk@skatepark.com', 'Tony Hawk', '123', '15', 'Tony Hawk.jpg', 'true', 'skater');
+
+
